@@ -9,7 +9,10 @@ import { Token } from "../entities/Token.entity";
 const normalSignin = async (request:Request,response:Response) => {
     try {
         const result  = validatebodyrequest(request.body,["username:string","email:string","password:string"]);
-        !result.proceed && response.json(result);
+       if ( !result.proceed ) {
+         return response.json(result)
+        return;
+        };
         const {username,email,password} = request.body;
         const token = token_generator();
         var encrypted_password = CryptoJS.AES.encrypt(password,process.env.PASSWORD_ENCRYPTION_CODE!).toString(); 
@@ -17,8 +20,7 @@ const normalSignin = async (request:Request,response:Response) => {
         const tokenRepo = data_source.getRepository(Token);
         const email_exist = userRepo.findOne({where:{email:email}});
         if(await email_exist){
-            response.json({message:"that email already exist",proceed:false});
-            return;
+            return response.json({message:"that email already exist",proceed:false});
         }; 
 
 
@@ -33,9 +35,9 @@ const normalSignin = async (request:Request,response:Response) => {
         token_.user_id = user.id;
         token_.token = token;
         await tokenRepo.save(token_);
-        response.json({message:"signup successfull",proceed:true,token});        
+        return response.json({message:"signup successfull",proceed:true,token});      
     } catch (error) {
-        response.json({message:`server error try again:${error}`,proceed:false})
+        return response.json({message:`server error try again:${error}`,proceed:false})
     } 
 }
 
