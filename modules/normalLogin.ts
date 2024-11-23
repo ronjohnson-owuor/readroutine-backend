@@ -36,14 +36,14 @@ const normalLogin = async (request: Request, response: Response) => {
       proceed: false,
     });
   }
-  let {token,encrypted_token} = token_generator();
+  let encrypted_token = token_generator();
   await data_source
     .createQueryBuilder()
     .update(Token)
     .set({token:encrypted_token})
     .where("user_id = :id", { id: user.id })
     .execute()
-    return response.json({message:"login success",proceed:true,token});
+    return response.json({message:"login success",proceed:true,token:encrypted_token});
 };
 
 export default normalLogin;

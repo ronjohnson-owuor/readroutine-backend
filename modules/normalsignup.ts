@@ -17,7 +17,7 @@ const normalSignin = async (request: Request, response: Response) => {
       return response.json(result);
     }
     const { username, email, password } = request.body;
-    let {token,encrypted_token} = token_generator();
+    let encrypted_token = token_generator();
     var encrypted_password = CryptoJS.AES.encrypt(
       password,
       process.env.PASSWORD_ENCRYPTION_CODE!
@@ -46,7 +46,7 @@ const normalSignin = async (request: Request, response: Response) => {
     return response.json({
       message: "signup successfull",
       proceed: true,
-      token,
+      token:encrypted_token,
     });
   } catch (error) {
     return response.json({

@@ -5,13 +5,5 @@ export const token_generator = () => {
     token,
     process.env.TOKEN_ENCRYPTION_CODE!
   ).toString();
-  return {token,encrypted_token};
-};
-
-export const decrypted_token = (token: string) => {
-    const decrypted_token = CryptoJS.AES.encrypt(
-        token,
-        process.env.TOKEN_ENCRYPTION_CODE!
-      ).toString();
-  return decrypted_token;
+  return encrypted_token;
 };

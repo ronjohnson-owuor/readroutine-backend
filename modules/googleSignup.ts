@@ -25,7 +25,7 @@ const googleSignin = async (request: Request, response: Response) => {
         proceed: false,
       });
     }
-    const { token, encrypted_token } = token_generator();
+    const encrypted_token = token_generator();
     var encrypted_password = CryptoJS.AES.encrypt(
       process.env.GOOGLE_APP_VERYFIER_KEY!,
       process.env.PASSWORD_ENCRYPTION_CODE!
@@ -45,7 +45,7 @@ const googleSignin = async (request: Request, response: Response) => {
       return response.json({
         message: "login successfull",
         proceed: true,
-        token,
+        token:encrypted_token,
       });
     }
     const user = new User();
@@ -62,7 +62,7 @@ const googleSignin = async (request: Request, response: Response) => {
     return response.json({
       message: "signup successfull redirecting to profile",
       proceed: true,
-      token,
+     token:encrypted_token,
     });
   } catch (error) {
     return response.json({
